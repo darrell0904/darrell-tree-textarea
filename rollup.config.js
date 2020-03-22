@@ -16,6 +16,9 @@ import cssnano from 'cssnano'
 
 import external from 'rollup-plugin-peer-deps-external'
 
+import babel from 'rollup-plugin-babel'
+import { DEFAULT_EXTENSIONS } from '@babel/core'
+
 import pkg from './package.json'
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -47,23 +50,12 @@ const rollupConfig = {
     external(),
 
     postcss({
-      // modules: true, // 增加 css-module 功能
+      modules: true, // 增加 css-module 功能
       extensions: ['.less', '.css'],
-      use: [
-        ['less', {
-          javascriptEnabled: true
-        }]
-      ],
-      inject: isDev, // dev 环境下的 样式是入住到 js 中的，其他环境不会注入
-      extract: false, // 无论是 dev 还是其他环境这个配置项都不做 样式的抽离
       plugins: [
         autoprefixer(),
         cssnano()
-      ]
-    }),
-
-    postcss({
-      modules: true
+      ],
     }),
 
     // 验证导入的文件
@@ -81,7 +73,15 @@ const rollupConfig = {
     }),
     rollupTypescript({
       rollupCommonJSResolveHack: true,
-      clean: true
+      clean: true,
+      tsconfig: "./tsconfig.json",
+    }),
+    babel({
+      extensions: [
+        ...DEFAULT_EXTENSIONS,
+        '.ts',
+        '.tsx'
+      ]
     }),
     // 使得 rollup 支持 commonjs 规范，识别 commonjs 规范的依赖
     // 配合 commnjs 解析第三方模块
