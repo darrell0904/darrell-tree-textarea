@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    /* 基础配置 */
+    "target": "es5",
+    "module": "ESNext",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "declaration": true,
+    "sourceMap": true,
+    "jsx": "react",
+
+    /* 强类型检查配置 */
+    "noImplicitAny": true,
+
+    /* 模块分析配置 */
+    "baseUrl": ".",
+    "outDir": "./lib",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": ["node_modules", "lib"]
+}
