@@ -1,10 +1,40 @@
 .wrapper {
-  color: red;
-  margin-left: 100px;
-  margin-top: 100px;
-  display: flex;
 
-  .text {
-    color: #4caf50;
+  .btnBox {
+    margin-top: 20px;
+    text-align: right;
+
+    .btn {
+      color: #fff;
+      background-color: #4caf50;
+      border-color: #4caf50;
+      text-shadow: 0 -1px 0 rgba(0,0,0,.12);
+      line-height: 1.5715;
+      position: relative;
+      display: inline-block;
+      font-weight: 400;
+      white-space: nowrap;
+      text-align: center;
+      background-image: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all .3s cubic-bezier(.645,.045,.355,1);
+      user-select: none;
+      touch-action: manipulation;
+      height: 32px;
+      padding: 4px 15px;
+      font-size: 14px;
+      border-radius: 2px;
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: #fff;
+        background-color: #43a047;
+        border-color: #43a047;
+        text-decoration: none;
+        outline: 0;
+      }
+    }
   }
 }

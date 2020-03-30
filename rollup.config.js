@@ -15,6 +15,7 @@ import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
 
 import external from 'rollup-plugin-peer-deps-external'
+import image from 'rollup-plugin-img';
 
 import babel from 'rollup-plugin-babel'
 import { DEFAULT_EXTENSIONS } from '@babel/core'
@@ -45,7 +46,7 @@ const rollupConfig = {
       }
     }
   ],
-  external: ['react', 'react-dom'],
+  external: ['react', 'react-dom', 'lodash'],
   plugins: [
     external(),
 
@@ -56,6 +57,12 @@ const rollupConfig = {
         autoprefixer(),
         cssnano()
       ],
+    }),
+
+    image({
+      extensions: /\.(png|jpg|jpeg|gif|svg)$/, // support png|jpg|jpeg|gif|svg, and it's alse the default value
+      limit: 8192,  // default 8192(8k)
+      exclude: 'node_modules/**'
     }),
 
     // 验证导入的文件

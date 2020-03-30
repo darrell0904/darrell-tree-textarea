@@ -12,7 +12,7 @@
     "jsx": "react",
 
     /* 强类型检查配置 */
-    "noImplicitAny": true,
+    "noImplicitAny": false,
 
     /* 模块分析配置 */
     "baseUrl": ".",
@@ -22,7 +22,8 @@
     "typeRoots": ["./node_modules/@types/", "./typings/"]
   },
   "include": [
-    "src"
+    "src",
+    "./typings/"
   ],
   "exclude": ["node_modules", "lib"]
 }
