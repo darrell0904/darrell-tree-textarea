@@ -42,7 +42,8 @@ const rollupConfig = {
       plugins: [terser()],
       globals: {
         'react-dom': 'ReactDOM',
-        react: 'React'
+        react: 'React',
+        'lodash': '_',
       }
     }
   ],
