@@ -17,6 +17,6 @@ export const goToEnd = (textAreaNode: any): void => {
  * 返回随机 id
  * 用于新增 树数据时 使用
  */
-const _id = () => {
+export const _id = () => {
   return `id_${Math.random().toString(12).substring(2)}`;
 };

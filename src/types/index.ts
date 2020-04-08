@@ -12,3 +12,17 @@ export interface errorInfo {
   errorCode: number;
   ERROR_INFO: any;
 }
+
+// textDataParser
+export interface parserItemObj {
+  id?: number | string;
+  value?: string;
+  level?: number;
+  parent_id?: number;
+
+  [propName: string]: any;
+}
+
+export interface parserRootObj {
+  namesArrObj: any;
+}

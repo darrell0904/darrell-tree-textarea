@@ -5,7 +5,11 @@ import {
 } from 'lodash';
 import { DEFAULT_TEXT } from '../utils/CONST'
 import { flattenChainedData, getTextAreaData } from '../utils/getFlattenData'
-import { isEquelLevel } from '../utils/getTreeData'
+import {
+	isEquelLevel,
+	getLevelTitles,
+	transDataFromText,
+} from '../utils/getTreeData'
 
 import styles from './index.less'
 
@@ -82,7 +86,14 @@ const TreeTextArea = (props: Props): JSX.Element => {
 		if (errorCode !== 0) {
 			setErrCode(errorCode);
 			setText(ERROR_INFO[errorCode]);
-    }
+    } else {
+			// console.log();
+			const levelTitles = getLevelTitles(__textAreaData);
+			const valueData = transDataFromText(__flattenData, __textAreaData);
+			
+			console.log('--levelTitles--', levelTitles);
+			console.log('--valueData--', valueData);
+		}
 
 	}
 
