@@ -153,7 +153,7 @@ const getTreeDataBylists = (lists, parent_id) => {
         item.children = null;
       }
       // 删除不必要属性
-      clearParamsInTreeData(item);
+      // clearParamsInTreeData(item);
 
       tree.push(item);
     }
@@ -204,10 +204,6 @@ export const transDataFromText = (flattenData: FlattenDataObj[], texts: string) 
     arr.shift();
   }
 
-  console.log('---newFlattenData---', newFlattenData);
-  console.log('---texts---', texts);
-
-
   // 解析 TextArea 数据 为 指定 层级映射数据
   const TextAreaData = parserRootData(arr, MAX_LEVEL);
 
@@ -236,6 +232,8 @@ export const transDataFromText = (flattenData: FlattenDataObj[], texts: string) 
   // 拼装最终数据
   // 已有、新增、删除数据
   const newDataLists = getLastData(handleDataArr, newAddNamesArrObj, deleteData, MAX_LEVEL);
+
+  // console.log('--newDataLists--', newDataLists);
 
   // // 得到 树状数据
   const _data = getTreeDataBylists(newDataLists, 0);

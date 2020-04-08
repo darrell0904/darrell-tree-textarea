@@ -1,19 +1,11 @@
-import {
-  forEach,
-  isArray,
-  cloneDeep,
-  toString,
-  uniq,
-  compact,
-  concat,
-} from 'lodash';
+import { forEach, cloneDeep, concat } from 'lodash';
 
 import { ROOT_ARR_PREFIX, EXIST_ARR_PREFIX, ADD_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX } from './CONST'
 
 import { _id } from './utils'
 
 
-import { FlattenDataObj, errorInfo, parserItemObj, parserRootObj } from '../types'
+import { FlattenDataObj, errorInfo, parserItemObj, parserRootObj, existAndAddDataObj, newAddNamesArrObj, addNewObj } from '../types'
 
 import { parserRootData } from './textDataParser'
 
@@ -161,6 +153,14 @@ const getParentIdByRootId = (flattenData, id) => {
   return parentId;
 };
 
+/**
+ * 表示 是否 textDataParser 数据对应
+ * @param flattenData 
+ * @param rootId 
+ * @param level 
+ * @param pid 
+ * @param namesArrObj 
+ */
 const isSameFlagForFlatten = (flattenData, rootId, level, pid, namesArrObj) => {
   let flag = false;
 
@@ -188,7 +188,7 @@ const isSameFlagForFlatten = (flattenData, rootId, level, pid, namesArrObj) => {
  * @param {*} newFlattenData : 扁平化数据
  * @param {Number} handleLevel : 要处理的级数
  */
-export const handleExistData = (TextAreaData, newFlattenData, handleLevel) => {
+export const handleExistData = (TextAreaData: parserRootObj, newFlattenData: FlattenDataObj[], handleLevel: number): existAndAddDataObj => {
   const { namesArrObj } = TextAreaData;
 
   const existNamesArrObj = {};
@@ -233,54 +233,32 @@ export const handleExistData = (TextAreaData, newFlattenData, handleLevel) => {
       const { value, parent_id, id } = item;
 
       // 新增数据 obj
-      const addNewObj = { level: i, value, id, new: true, root_id: id, parent_id: 0 };
-
-      if (i === 1) {
-        addNewObj.parent_id = 0;
-      }
+      const addNewObj: addNewObj = {
+        level: i,
+        value,
+        id,
+        new: true,
+        root_id: id,
+      };
 
       forEach(newFlattenData, (val) => {
         if (value === val.value) {
           if (val.level === i) {
-            // 第一级
+            // level 等于 1
             if (val.level === 1 && val.parent_id === 0) {
               const obj = { ...val };
               existNamesArrObj[`${EXIST_ARR_PREFIX}_${i}`].push(obj);
               flag = true;
             }
-            // 大于第一级
+            // level 大于 1
             if (val.level !== 1 || val.parent_id !== 0) {
               if (isExistitem(namesArrObj, newFlattenData, val, parent_id, i)) {
                 const obj = { ...val };
                 existNamesArrObj[`${EXIST_ARR_PREFIX}_${i}`].push(obj);
                 flag = true;
-              } else {
-                // 前一级的数组
-                const prevNameArr = namesArrObj[`${ROOT_ARR_PREFIX}_${i - 1}`];
-                const newParentValue = getValueById(prevNameArr, parent_id);
-                const hasDataBeenId = getIdByValueName(
-                  newFlattenData, newParentValue, parent_id, i - 1,
-                );
-
-                addNewObj.parent_id = hasDataBeenId;
               }
             }
-          } else {
-            const prevNameArr = namesArrObj[`${ROOT_ARR_PREFIX}_${i - 1}`];
-            const newParentValue = getValueById(prevNameArr, parent_id);
-            const hasDataBeenId = getIdByValueName(
-              newFlattenData, newParentValue, parent_id, i - 1,
-            );
-
-            addNewObj.parent_id = hasDataBeenId;
           }
-        } else {
-          // 前一级的数组
-          const prevNameArr = namesArrObj[`${ROOT_ARR_PREFIX}_${i - 1}`];
-          const newParentValue = getValueById(prevNameArr, parent_id);
-          const hasDataBeenId = getIdByValueName(newFlattenData, newParentValue, parent_id, i - 1);
-
-          addNewObj.parent_id = hasDataBeenId;
         }
       });
 
@@ -291,6 +269,9 @@ export const handleExistData = (TextAreaData, newFlattenData, handleLevel) => {
     });
   }
 
+  // const aaa = cloneDeep(addNamesArrObj);
+  // console.log('---aaa----', aaa);
+
   return {
     addNamesArrObj,
     existNamesArrObj,
@@ -298,7 +279,7 @@ export const handleExistData = (TextAreaData, newFlattenData, handleLevel) => {
 };
 
 /**
- * 处理新增数据
+ **************** 处理新增数据 *****************
  */
 
 /**
@@ -323,7 +304,7 @@ const setAddDataParams = (levelArr, TextAreaData, newFlattenData, level, handleL
           item.parent_id = 0;
         } else {
           const curLeveArr = namesArrObj[`${ROOT_ARR_PREFIX}_${level}`];
-          // 为了获取 上一级的名字
+          // 获取 上一级的名字
           const prevLeveArr = namesArrObj[`${ROOT_ARR_PREFIX}_${level - 1}`];
 
           forEach(curLeveArr, (val) => {
@@ -352,7 +333,7 @@ const setAddDataParams = (levelArr, TextAreaData, newFlattenData, level, handleL
  * @param {*} newFlattenData : 扁平化数据
  * @param {Number} handleLevel : 要处理的级数
  */
-export const handleParamsInAddData = (handleDataArr, TextAreaData, newFlattenData, handleLevel) => {
+export const handleParamsInAddData = (handleDataArr, TextAreaData, newFlattenData, handleLevel): newAddNamesArrObj => {
   // 新增的映射
   const { addNamesArrObj } = handleDataArr;
   const newAddNamesArrObj = {};
@@ -372,7 +353,7 @@ export const handleParamsInAddData = (handleDataArr, TextAreaData, newFlattenDat
 };
 
 /**
- * 处理删除数据
+ **************** 处理删除数据 *****************
  */
 
 /**

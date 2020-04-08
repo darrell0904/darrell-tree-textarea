@@ -80,9 +80,6 @@ const TreeTextArea = (props: Props): JSX.Element => {
 
 		const { errorCode, ERROR_INFO } = isEquelLevel(__textAreaData);
 
-		console.log('---errorCode---', errorCode);
-		console.log('---ERROR_INFO---', ERROR_INFO);
-
 		if (errorCode !== 0) {
 			setErrCode(errorCode);
 			setText(ERROR_INFO[errorCode]);

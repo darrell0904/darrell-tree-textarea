@@ -1,3 +1,5 @@
+import { ROOT_ARR_PREFIX } from '../utils/CONST'
+
 // flattenData 接口
 export interface FlattenDataObj {
   title?: string;
@@ -25,4 +27,29 @@ export interface parserItemObj {
 
 export interface parserRootObj {
   namesArrObj: any;
+}
+
+export interface existAndAddDataObj {
+  addNamesArrObj: any;
+  existNamesArrObj: any;
+}
+
+export interface newAddNamesArrObj {
+  newAddNamesArrObj: any;
+}
+
+// 这个之后在定义
+export interface namesArrObj {
+  [propName: string]: any;
+}
+
+export interface addNewObj {
+  level?: number;
+  value?: string;
+  id?: number | string;
+  new?: boolean;
+  root_id?: number | string;
+  parent_id?: number | string;
+
+  [propName: string]: any;
 }

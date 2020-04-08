@@ -4,7 +4,7 @@ import { ROOT_ARR_PREFIX } from './CONST'
 
 import { _id } from './utils'
 
-import { parserItemObj, parserRootObj } from '../types'
+import { parserItemObj, parserRootObj, namesArrObj } from '../types'
 
 /**
  * 递归判断 是否时相同的爸爸
@@ -14,7 +14,7 @@ import { parserItemObj, parserRootObj } from '../types'
  * @param {Number} level : 级数
  * @param {Number} pid : 当前循环 item 的 爸爸的 id
  */
-const isSameFlag = (namesArrObj, itemArr, level, pid) => {
+const isSameFlag = (namesArrObj: namesArrObj, itemArr: string[], level: number, pid: number): boolean => {
   let flag = false;
 
   const curLeveArr = namesArrObj[`${ROOT_ARR_PREFIX}_${level}`];
@@ -53,7 +53,7 @@ const isSameFlag = (namesArrObj, itemArr, level, pid) => {
  * @param {Array} itemArr : textarea 每一行的字符串转化的数组
  * @param {Number} level : 级数
  */
-const sameParentNew = (namesArrObj, itemArr, level) => {
+const sameParentNew = (namesArrObj: namesArrObj, itemArr: string[], level: number): boolean => {
   let flag = false;
 
   // 当前级数 Arr
@@ -82,7 +82,7 @@ const sameParentNew = (namesArrObj, itemArr, level) => {
  * @param {Array} itemArr : textarea 每一行的字符串转化的数组
  * @param {Number} level : 当前级数
  */
-const getParentIdNew = (namesArrObj, itemArr, level) => {
+const getParentIdNew = (namesArrObj: namesArrObj, itemArr: string[], level: number): number => {
   let id = 0;
 
   // 前一级的 parser 数据
@@ -100,14 +100,14 @@ const getParentIdNew = (namesArrObj, itemArr, level) => {
 };
 
 /**
- * 将 textarea 数据 转化为 一、二、三 级数据
+ * 将 textarea 数据 转化为 相应级数 的 数据
  * @param {Array} textArr : textarea 的文本 转化的数组
  * @param {Number} handleLevel : 要处理的级数
  */
 export const parserRootData = (textArr: string[], handleLevel: number): parserRootObj => {
   const uniqueTextArr = uniq(textArr);
 
-  const namesArrObj = {};
+  const namesArrObj: namesArrObj = {};
 
   for (let i = 1; i <= handleLevel; i++) {
     namesArrObj[`${ROOT_ARR_PREFIX}_${i}`] = [];
