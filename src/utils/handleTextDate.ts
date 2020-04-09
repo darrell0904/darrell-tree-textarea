@@ -1,13 +1,23 @@
-import { forEach, cloneDeep, concat } from 'lodash';
+/**
+ * 填充已有数据
+ * 筛选新增数据
+ * 筛选删除数据
+ */
+
+import { forEach, concat } from 'lodash';
 
 import { ROOT_ARR_PREFIX, EXIST_ARR_PREFIX, ADD_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX } from './CONST'
 
 import { _id } from './utils'
 
-
-import { FlattenDataObj, errorInfo, parserItemObj, parserRootObj, existAndAddDataObj, newAddNamesArrObj, addNewObj } from '../types'
-
-import { parserRootData } from './textDataParser'
+import {
+  FlattenDataObj,
+  parserRootObj,
+  existAndAddDataObj,
+  newAddNamesArrObj,
+  addNewObj,
+  namesArrObj,
+} from '../types'
 
 /**
  * 通过 value 名 获取对应 item 的 id
@@ -16,10 +26,10 @@ import { parserRootData } from './textDataParser'
  * @param {String} name : value 名字
  * @param {number} parentId : 当前级数的 id
  */
-const getIdByValueName = (flattenData, name, parentId, level) => {
+const getIdByValueName = (flattenData: FlattenDataObj[], name: string, parentId: number | string, level: number): number | string => {
   if (!flattenData) return;
 
-  let id = 0;
+  let id: number | string = 0;
 
   forEach(flattenData, (item) => {
     if (level === 1) {
@@ -42,7 +52,7 @@ const getIdByValueName = (flattenData, name, parentId, level) => {
  * @param {Array} flattenData : 扁平化数据
  * @param {Number} id : id
  */
-const getValueById = (flattenData, id) => {
+const getValueById = (flattenData: FlattenDataObj[], id: number | string): string => {
   if (!flattenData) return;
 
   let value = '';
@@ -61,10 +71,10 @@ const getValueById = (flattenData, id) => {
  * @param {Array} flattenData : 扁平化数据
  * @param {Number} id : id
  */
-const getParentIdById = (flattenData, id) => {
+const getParentIdById = (flattenData: FlattenDataObj[], id: number | string): number | string => {
   if (!flattenData) return;
 
-  let parentId = 0;
+  let parentId: number | string = 0;
 
   forEach(flattenData, (item) => {
     if (item.id === id) {
@@ -80,7 +90,7 @@ const getParentIdById = (flattenData, id) => {
  * @param {Array} flattenData : 扁平化数据
  * @param {Number} id : id
  */
-const getItemById = (flattenData, id) => {
+const getItemById = (flattenData: FlattenDataObj[], id: number | string): FlattenDataObj => {
   if (!flattenData) return;
 
   let curItem = {};
@@ -102,10 +112,10 @@ const getItemById = (flattenData, id) => {
  * @param {Number} parent_id : textDataParser() 参数循环 pid
  * @param {Number} level : 级数
  */
-const isExistitem = (namesArrObj, newFlattenData, val, parent_id, level) => {
+const isExistitem = (namesArrObj: namesArrObj, newFlattenData: FlattenDataObj[], val: FlattenDataObj, parent_id: number | string, level: number): boolean => {
   let flag = false;
 
-  const valParentId = parseInt(val.parent_id, 10);
+  const valParentId = val.parent_id;
 
   // 用于比较前一级的name 是否相同
   const curLeveArr = namesArrObj[`${ROOT_ARR_PREFIX}_${level - 1}`];
@@ -125,10 +135,10 @@ const isExistitem = (namesArrObj, newFlattenData, val, parent_id, level) => {
   return flag;
 };
 
-const getRootIdByParentId = (flattenData, id) => {
+const getRootIdByParentId = (flattenData: FlattenDataObj[], id: number | string): string => {
   if (!flattenData) return;
 
-  let rootId = 0;
+  let rootId: string = '0';
 
   forEach(flattenData, (item) => {
     if (item.id === id) {
@@ -139,10 +149,10 @@ const getRootIdByParentId = (flattenData, id) => {
   return rootId;
 };
 
-const getParentIdByRootId = (flattenData, id) => {
+const getParentIdByRootId = (flattenData: FlattenDataObj[], id: number | string): number | string => {
   if (!flattenData) return;
 
-  let parentId = 0;
+  let parentId: number | string = 0;
 
   forEach(flattenData, (item) => {
     if (item.root_id === id) {
@@ -161,7 +171,7 @@ const getParentIdByRootId = (flattenData, id) => {
  * @param pid 
  * @param namesArrObj 
  */
-const isSameFlagForFlatten = (flattenData, rootId, level, pid, namesArrObj) => {
+const isSameFlagForFlatten = (flattenData: FlattenDataObj[], rootId: string, level: number, pid: number | string, namesArrObj: namesArrObj): boolean => {
   let flag = false;
 
   const curLeveArr = namesArrObj[`${ROOT_ARR_PREFIX}_${level}`];
@@ -291,7 +301,7 @@ export const handleExistData = (TextAreaData: parserRootObj, newFlattenData: Fla
  * @param {Number} level : 级数
  * @param {Number} handleLevel : 要处理的级数
  */
-const setAddDataParams = (levelArr, TextAreaData, newFlattenData, level, handleLevel) => {
+const setAddDataParams = (levelArr: FlattenDataObj[], TextAreaData: parserRootObj, newFlattenData: FlattenDataObj[], level: number, handleLevel: number): FlattenDataObj[] => {
   // 最原始映射
   const { namesArrObj } = TextAreaData;
 
@@ -333,7 +343,7 @@ const setAddDataParams = (levelArr, TextAreaData, newFlattenData, level, handleL
  * @param {*} newFlattenData : 扁平化数据
  * @param {Number} handleLevel : 要处理的级数
  */
-export const handleParamsInAddData = (handleDataArr, TextAreaData, newFlattenData, handleLevel): newAddNamesArrObj => {
+export const handleParamsInAddData = (handleDataArr: existAndAddDataObj, TextAreaData: parserRootObj, newFlattenData: FlattenDataObj[], handleLevel: number): newAddNamesArrObj => {
   // 新增的映射
   const { addNamesArrObj } = handleDataArr;
   const newAddNamesArrObj = {};
@@ -361,7 +371,7 @@ export const handleParamsInAddData = (handleDataArr, TextAreaData, newFlattenDat
  * @param {*} existData : 已存在数据
  * @param {*} newFlattenData : 扁平化数据
  */
-const addTagForDeleleData = (existData, newFlattenData) => {
+const addTagForDeleleData = (existData: FlattenDataObj[], newFlattenData: FlattenDataObj[]): FlattenDataObj[] => {
   const deleteData = [];
 
   forEach(newFlattenData, (item) => {
@@ -390,7 +400,7 @@ const addTagForDeleleData = (existData, newFlattenData) => {
  * @param {*} newFlattenData : 扁平化数据
  * @param {Number} handleLevel : 要处理的级数
  */
-export const handleTagForDeleleByLevel = (handleDataArr, newFlattenData, handleLevel) => {
+export const handleTagForDeleleByLevel = (handleDataArr: existAndAddDataObj, newFlattenData: FlattenDataObj[], handleLevel: number): FlattenDataObj[] => {
   const { existNamesArrObj } = handleDataArr;
 
   let existData = [];

@@ -2,9 +2,16 @@ import { ROOT_ARR_PREFIX } from '../utils/CONST'
 
 // flattenData 接口
 export interface FlattenDataObj {
+  id?: number | string;
   title?: string;
   value?: string;
+  level?: number;
+  parent_id?: number | string;
+  new?: boolean;
+  root_id?: string;
   hasChildren?: boolean;
+  status?: number;
+  children?: FlattenDataObj[];
 
   [propName: string]: any;
 }
@@ -20,7 +27,7 @@ export interface parserItemObj {
   id?: number | string;
   value?: string;
   level?: number;
-  parent_id?: number;
+  parent_id?: number | string;
 
   [propName: string]: any;
 }
@@ -48,7 +55,7 @@ export interface addNewObj {
   value?: string;
   id?: number | string;
   new?: boolean;
-  root_id?: number | string;
+  root_id?: string;
   parent_id?: number | string;
 
   [propName: string]: any;

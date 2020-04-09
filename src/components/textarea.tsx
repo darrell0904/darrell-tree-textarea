@@ -76,7 +76,7 @@ const TreeTextArea = (props: Props): JSX.Element => {
 
 	const getTreeData = (e: any): void => {
 		// console.log('---__textAreaData---', __textAreaData);
-		// console.log('---__flattenData---', __flattenData);
+		console.log('---__flattenData---', __flattenData);
 
 		const { errorCode, ERROR_INFO } = isEquelLevel(__textAreaData);
 
