@@ -14,7 +14,7 @@ import styles from './index.less'
 interface Props {
 	treeTitle?: any;
 	treeData?: any;
-	shouleGetTreeData?: boolean
+	shouleGetTreeData?: boolean;
 	delimiter?: string;
 	showNumber?: boolean;
 	placeholder?: string;
@@ -26,19 +26,15 @@ interface Props {
 
 const TreeTextArea = (props: Props): JSX.Element => {
 
-	console.log('---props---', props);
-
 	// 属性值
-	const [__row, setRow] = useState(props.row || 21);
-	const [__showNumber, setShowNumber] = useState(props.showNumber || true);
-	const [__delimiter, setDelimiter] = useState(props.delimiter || '/');
-	const [__shouleGetTreeData, setShouleGetTreeData] = useState(props.shouleGetTreeData !== undefined ? props.shouleGetTreeData : true);
-	const [__placeholder, setPlaceholder] = useState(props.placeholder || '请输入');
-	const [__treeData, setTreeData] = useState(props.treeData || []);
-	const [__treeTitle, setTreeTitle] = useState(props.treeTitle || []);
-	const [__maxLevel, setMaxLevel] = useState(props.maxLevel || 4);
-
-
+	// const [__row, setRow] = useState(props.row || 21);
+	// const [__showNumber, setShowNumber] = useState(props.showNumber || true);
+	// const [__delimiter, setDelimiter] = useState(props.delimiter || '/');
+	// const [__shouleGetTreeData, setShouleGetTreeData] = useState(props.shouleGetTreeData !== undefined ? props.shouleGetTreeData : true);
+	// const [__placeholder, setPlaceholder] = useState(props.placeholder || '请输入');
+	// const [__treeData, setTreeData] = useState(props.treeData || []);
+	// const [__treeTitle, setTreeTitle] = useState(props.treeTitle || []);
+	// const [__maxLevel, setMaxLevel] = useState(props.maxLevel || 4);
 
 	// 内部状态
 	const [__errCode, setErrCode] = useState(0);
@@ -46,6 +42,15 @@ const TreeTextArea = (props: Props): JSX.Element => {
 	const [__textAreaData, setTextAreaData] = useState('');
 	const [__flattenData, setFlattenData] = useState([]);
 	// const [__curTitles, setCurTitles] = useState('');
+
+	const __row = props.row || 21;
+	const __showNumber = props.showNumber || true;
+	const __delimiter = props.delimiter || '/';
+	const __shouleGetTreeData = props.shouleGetTreeData !== undefined ? props.shouleGetTreeData : true;
+	const __placeholder = props.placeholder || '请输入';
+	const __treeData = props.treeData || [];
+	const __treeTitle = props.treeTitle || [];
+	const __maxLevel = props.maxLevel || 4;
 
 
 	useEffect(()=>{
@@ -142,6 +147,3 @@ const TreeTextArea = (props: Props): JSX.Element => {
 };
 
 export default TreeTextArea;
-
-
-// typescript 使用 less

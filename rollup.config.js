@@ -26,7 +26,10 @@ const isDev = process.env.NODE_ENV === 'development'
 
 const paths = {
   input: path.join(__dirname, '/src/index.tsx'),
-  output: path.join(__dirname, '/lib')
+  inputTest: path.join(__dirname, '/src/components/textarea.tsx'),
+  output: path.join(__dirname, '/lib'),
+  examInput: path.join(__dirname, '/example/src/index.js'),
+  examOutput: path.join(__dirname, '/example/src/'),
 }
 
 // rollup 配置项
@@ -96,7 +99,8 @@ const rollupConfig = {
     commonjs({
       include: 'node_modules/**',
       namedExports: {
-        'node_modules/react-is/index.js': ['isValidElementType']
+        'node_modules/react-is/index.js': ['isValidElementType'],
+        'node_modules/my-lib/index.js': [ 'named' ]
       }
     }),
     serve({

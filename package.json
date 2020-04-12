@@ -5,9 +5,10 @@
   "main": "lib/index.js",
   "scripts": {
     "dev": "rollup --c rollup.config.js --watch",
-    "build": "rollup --c rollup.config.js",
+    "build": "NODE_ENV=production rollup --c rollup.config.js",
     "test": "jest --coverage --verbose -u",
     "api": "api-extractor run",
+    "lint": "eslint --ext .tsx ./src",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "author": "Darrell",
@@ -38,6 +39,7 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-standard": "^4.0.1",
     "http-server": "^0.12.1",
     "jest": "^24.9.0",

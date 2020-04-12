@@ -8,9 +8,9 @@ import {
   concat,
 } from 'lodash';
 
-import { EXIST_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX, MAX_LEVEL, ERROR_INFO } from './CONST'
+import { EXIST_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX, MAX_LEVEL, ERROR_INFO } from '../utils/CONST'
 
-import { _id } from './utils'
+import { _id } from '../utils/utils'
 
 import { FlattenDataObj, errorInfo } from '../types'
 

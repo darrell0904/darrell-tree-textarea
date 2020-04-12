@@ -6,13 +6,6 @@
         "modules": false
       }
     ],
-    "@babel/preset-react",
-    [
-      "@babel/preset-typescript",
-      {
-        "isTSX":true,//关键配置
-        "allExtensions": true//关键配置
-      }
-    ]
+    "@babel/preset-react"
   ]
 }
