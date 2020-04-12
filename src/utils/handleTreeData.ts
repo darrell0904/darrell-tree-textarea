@@ -1,38 +1,20 @@
-import {
-  forEach,
-  isArray,
-  cloneDeep,
-  uniq,
-  compact,
-  concat,
-} from 'lodash';
+/**
+ * 处理 textarea 数据类
+ */
 
-import { ROOT_ARR_PREFIX, ADD_ARR_PREFIX, EXIST_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX, MAX_LEVEL, ERROR_INFO } from './CONST'
+import { forEach, isArray, cloneDeep, uniq, compact, concat } from 'lodash';
 
-import {
-  _id,
-  getWantIdByFromId,
-  getItemById,
-  getValueById,
-  getIdByValueNameAndId,
-} from './utils'
+import { ROOT_ARR_PREFIX, ADD_ARR_PREFIX, EXIST_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX, EXIST_ADD_ARR_PREFIX, MAX_LEVEL, ERROR_INFO, Delimiter } from './CONST'
 
-import {
-  FlattenDataObj,
-  parserRootObj,
-  existAndAddDataObj,
-  newAddNamesArrObj,
-  addNewObj,
-  errorInfo,
+import { _id, getWantIdByFromId, getItemById, getValueById, getIdByValueNameAndId } from './utils'
 
-  parserItemObj,
-  namesArrObj,
-
-} from '../types'
+import { FlattenDataObj, addNewObj, errorInfo, parserItemObj, namesArrObj } from '../types'
 
 interface treeTextAreaData {
   flattenData: FlattenDataObj[];
   textAreaTexts: string;
+  delimiter?: string;
+  maxLevel?: number;
 }
 
 class treeTextAreaDataHandle {
@@ -62,6 +44,9 @@ class treeTextAreaDataHandle {
   // 处理后的新增数据
   private newAddNamesArrObj: namesArrObj;
 
+  // 存在数据和新增数据
+  private existAndAddArrObj: namesArrObj;
+
   // 填充数据
   private deleteData: FlattenDataObj[];
 
@@ -71,20 +56,30 @@ class treeTextAreaDataHandle {
   // 最终生成的树状数据
   private lastTreeData: any;
 
+  // 分隔符
+  private delimiter: string = Delimiter;
 
 
   constructor(options: treeTextAreaData) {
-    const { flattenData, textAreaTexts } = options;
+    const { flattenData, textAreaTexts, delimiter, maxLevel } = options;
 
-    this.flattenData = flattenData;
+    this.flattenData = cloneDeep(flattenData);
     this.textAreaTexts = textAreaTexts;
+
+    if (delimiter) {
+      this.delimiter = delimiter;
+    }
+
+    if (maxLevel) {
+      this.MAX_LEVEL = maxLevel;
+    }
   }
-  
+
   /**
    * 校验 输入内容是否符合要求
    * @param {String} texts : textarea 的文本
    */
-  public isEquelLevel() {
+  public getLevelTitles() {
     const textAreaTexts = this.textAreaTexts;
 
     const arr = textAreaTexts.split('\n');
@@ -104,8 +99,9 @@ class treeTextAreaDataHandle {
    * 获取 多级下拉 的标题，textarea 的第一行
    * @param {String} texts : textarea 的文本
    */
-  public getLevelTitles(): errorInfo {
+  public isEquelLevel(): errorInfo {
     const texts = this.textAreaTexts;
+    const delimiter = this.delimiter;
 
     const firstArray = texts.split('\n');
     const titleTextArr = firstArray[0];
@@ -119,7 +115,7 @@ class treeTextAreaDataHandle {
     // 去重
     const uniqueContentArr = uniq(textArr);
 
-    const arrTitleArr = titleTextArr ? titleTextArr.split('/') : [];
+    const arrTitleArr = titleTextArr ? titleTextArr.split(delimiter) : [];
     const arrTitleArrLen = compact(arrTitleArr).length;
 
     // 查看 ERROR_INFO
@@ -138,7 +134,7 @@ class treeTextAreaDataHandle {
     let contentEmpty = false;
 
     forEach(uniqueContentArr, (item) => {
-      const itemArr = item.split('/') || [];
+      const itemArr = item.split(delimiter) || [];
 
       // 去掉数组中 非假值元素
       const newItemArr = compact(itemArr);
@@ -191,11 +187,8 @@ class treeTextAreaDataHandle {
    */
   public transDataFromText() {
     const texts = this.textAreaTexts;
-    const flattenData = cloneDeep(this.flattenData);
 
     const arr = texts.split('\n');
-
-    const newFlattenData = cloneDeep(flattenData);
 
     if (arr.length > 1) {
       arr.shift();
@@ -302,6 +295,7 @@ class treeTextAreaDataHandle {
   private parserRootData() {
     const textArr  = this.textAreaArr;
     const handleLevel = this.MAX_LEVEL;
+    const delimiter = this.delimiter;
 
     const uniqueTextArr = uniq(textArr);
 
@@ -312,7 +306,7 @@ class treeTextAreaDataHandle {
     }
 
     forEach(uniqueTextArr, (item: string) => {
-      const itemArr = item.split('/');
+      const itemArr = item.split(delimiter);
 
       for (let i = 1; i <= handleLevel; i++) {
         if (!treeTextAreaDataHandle.sameParentNew(namesArrObj, itemArr, i) && itemArr[i - 1]) {
@@ -337,9 +331,6 @@ class treeTextAreaDataHandle {
   // ----------------------------------
   // ------ textDataParser END --------
   // ----------------------------------
-
-
-
 
   // -------------------------------------------
   // ------ 填充已有数据 并筛选新增数据 START ------
@@ -576,10 +567,12 @@ class treeTextAreaDataHandle {
 
     const existNamesArrObj = {};
     const addNamesArrObj = {};
+    const existAndAddArrObj = {};
 
     for (let i = 1; i <= handleLevel; i++) {
       addNamesArrObj[`${ADD_ARR_PREFIX}_${i}`] = [];
       existNamesArrObj[`${EXIST_ARR_PREFIX}_${i}`] = [];
+      existAndAddArrObj[`${EXIST_ADD_ARR_PREFIX}_${i}`] = [];
     }
 
     // flatten 加上 parser 的 映射 id
@@ -632,6 +625,7 @@ class treeTextAreaDataHandle {
               if (val.level === 1 && val.parent_id === 0) {
                 const obj = { ...val };
                 existNamesArrObj[`${EXIST_ARR_PREFIX}_${i}`].push(obj);
+                existAndAddArrObj[`${EXIST_ADD_ARR_PREFIX}_${i}`].push(obj);
                 flag = true;
               }
               // level 大于 1
@@ -639,6 +633,7 @@ class treeTextAreaDataHandle {
                 if (this.isExistitem(val, parent_id, i)) {
                   const obj = { ...val };
                   existNamesArrObj[`${EXIST_ARR_PREFIX}_${i}`].push(obj);
+                  existAndAddArrObj[`${EXIST_ADD_ARR_PREFIX}_${i}`].push(obj);
                   flag = true;
                 }
               }
@@ -648,6 +643,7 @@ class treeTextAreaDataHandle {
 
         if (!flag) {
           addNamesArrObj[`${ADD_ARR_PREFIX}_${i}`].push(addNewObj);
+          existAndAddArrObj[`${EXIST_ADD_ARR_PREFIX}_${i}`].push(addNewObj);
           newFlattenData.push(addNewObj);
         }
       });
@@ -656,8 +652,12 @@ class treeTextAreaDataHandle {
     // const aaa = cloneDeep(addNamesArrObj);
     // console.log('---aaa----', aaa);
 
+    console.log('---existNamesArrObj---', existNamesArrObj);
+    console.log('---addNamesArrObj---', addNamesArrObj);
+
     this.existNamesArrObj = existNamesArrObj;
     this.addNamesArrObj = addNamesArrObj;
+    this.existAndAddArrObj = existAndAddArrObj;
   };
 
 
@@ -829,6 +829,8 @@ class treeTextAreaDataHandle {
   private getLastFlattenData() {
     const existNamesArrObj = this.existNamesArrObj;
     const newAddNamesArrObj = this.newAddNamesArrObj;
+    // const addNamesArrObj = this.addNamesArrObj;
+    const existAndAddArrObj = this.existAndAddArrObj;
     const deleteData = this.deleteData;
     const handleLevel = this.MAX_LEVEL;
 
@@ -836,16 +838,22 @@ class treeTextAreaDataHandle {
 
     let AddLast = [];
     let ExistLast = [];
+    let ExistAndLast = [];
+
 
     for (let i = 1; i <= handleLevel; i++) {
       const curArrayExist = existNamesArrObj[`${EXIST_ARR_PREFIX}_${i}`];
       const curArrayAdd = newAddNamesArrObj[`${HANDLE_ADD_ARR_PREFIX}_${i}`];
+      const curArrayExistAndAdd = existAndAddArrObj[`${EXIST_ADD_ARR_PREFIX}_${i}`];
 
       ExistLast = concat(ExistLast, curArrayExist);
       AddLast = concat(AddLast, curArrayAdd);
+      ExistAndLast = concat(ExistAndLast, curArrayExistAndAdd);
     }
 
-    lastData = concat(lastData, ExistLast, AddLast, deleteData);
+    lastData = concat(lastData, ExistAndLast, deleteData);
+
+    console.log('----lastData---', lastData);
 
     this.newDataLists = lastData;
   };
@@ -901,7 +909,7 @@ class treeTextAreaDataHandle {
         }
 
         // 删除不必要属性
-        treeTextAreaDataHandle.clearParamsInTreeData(item);
+        // treeTextAreaDataHandle.clearParamsInTreeData(item);
 
         tree.push(item);
       }
@@ -914,3 +922,5 @@ class treeTextAreaDataHandle {
   // ------ 开始组装最后的树数据 END ------
   // -------------------------------------
 }
+
+export default treeTextAreaDataHandle;

@@ -4,7 +4,7 @@ import TitlePng from '../../assets/text_area_title.png'
 import styles from './index.less';
 
 interface Props {
-  row?: number;
+  row: number;
   value?: string;
   showNumber?: boolean;
   placeholder?: string;
@@ -16,7 +16,7 @@ interface Props {
 const NumberTextArea = (props: Props): JSX.Element => {
 	const { showNumber, placeholder, value, row } = props;
 
-	const [curRow, setCurRow] = useState(props.row || 21);
+	const [curRow, setCurRow] = useState(props.row);
 	const [scrollTop, setScrollTop] = useState(0);
 	const [firstLineMarginTop, setFirstLineMarginTop] = useState(0);
 	const [errCode, setErrCode] = useState(props.errCode);

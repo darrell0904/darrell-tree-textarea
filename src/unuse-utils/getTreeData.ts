@@ -8,15 +8,19 @@ import {
   concat,
 } from 'lodash';
 
-import { ROOT_ARR_PREFIX, EXIST_ARR_PREFIX, ADD_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX, MAX_LEVEL, ERROR_INFO } from './CONST'
+import { EXIST_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX, MAX_LEVEL, ERROR_INFO } from './CONST'
 
 import { _id } from './utils'
 
-
-import { FlattenDataObj, errorInfo, parserItemObj, parserRootObj } from '../types'
+import { FlattenDataObj, errorInfo } from '../types'
 
 import { parserRootData } from './textDataParser'
-import { handleExistData, handleParamsInAddData, handleTagForDeleleByLevel } from './handleTextDate'
+
+import {
+  handleExistData,
+  handleParamsInAddData,
+  handleTagForDeleleByLevel,
+} from './handleTextDate'
 
 
 /**
@@ -228,6 +232,8 @@ export const transDataFromText = (flattenData: FlattenDataObj[], texts: string) 
     newFlattenData,
     MAX_LEVEL,
   );
+
+  console.log('---deleteData---', deleteData);
 
   // 拼装最终数据
   // 已有、新增、删除数据

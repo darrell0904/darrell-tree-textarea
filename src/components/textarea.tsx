@@ -1,42 +1,43 @@
 import React,  { useState, useEffect } from 'react'
+import { isArray } from 'lodash';
+
 import NumberTextArea from './textarea/index'
-import {
-  isArray,
-} from 'lodash';
+
 import { DEFAULT_TEXT } from '../utils/CONST'
+
 import { flattenChainedData, getTextAreaData } from '../utils/getFlattenData'
-import {
-	isEquelLevel,
-	getLevelTitles,
-	transDataFromText,
-} from '../utils/getTreeData'
+import treeTextAreaDataHandle from '../utils/handleTreeData';
 
 import styles from './index.less'
 
-// const styles = require('./index.less')
-// title ["请选择省份", "城市", "区县", "学校"]
-// value 
 
 interface Props {
-	treeTitle: any;
-	treeData: any;
+	treeTitle?: any;
+	treeData?: any;
 	shouleGetTreeData?: boolean
 	delimiter?: string;
 	showNumber?: boolean;
 	placeholder?: string;
 	row?: number;
+	maxLevel?: number;
+	defaultData?: string;
+	onChangeTreeData?(treeTitle: any, treeData: any): void;
 }
 
 const TreeTextArea = (props: Props): JSX.Element => {
+
+	console.log('---props---', props);
 
 	// 属性值
 	const [__row, setRow] = useState(props.row || 21);
 	const [__showNumber, setShowNumber] = useState(props.showNumber || true);
 	const [__delimiter, setDelimiter] = useState(props.delimiter || '/');
-	const [__shouleGetTreeData, setShouleGetTreeData] = useState(props.shouleGetTreeData || true);
+	const [__shouleGetTreeData, setShouleGetTreeData] = useState(props.shouleGetTreeData !== undefined ? props.shouleGetTreeData : true);
 	const [__placeholder, setPlaceholder] = useState(props.placeholder || '请输入');
 	const [__treeData, setTreeData] = useState(props.treeData || []);
 	const [__treeTitle, setTreeTitle] = useState(props.treeTitle || []);
+	const [__maxLevel, setMaxLevel] = useState(props.maxLevel || 4);
+
 
 
 	// 内部状态
@@ -44,7 +45,7 @@ const TreeTextArea = (props: Props): JSX.Element => {
 	const [__errText, setText] = useState('');
 	const [__textAreaData, setTextAreaData] = useState('');
 	const [__flattenData, setFlattenData] = useState([]);
-	const [__curTitles, setCurTitles] = useState('');
+	// const [__curTitles, setCurTitles] = useState('');
 
 
 	useEffect(()=>{
@@ -52,15 +53,15 @@ const TreeTextArea = (props: Props): JSX.Element => {
 			let titles = '请输入';
 
 			if (__treeTitle.length > 0) {
-				titles = __treeTitle.join('/');
+				titles = __treeTitle.join(__delimiter);
 			}
 
 			const flattenData = flattenChainedData(__treeData);
-    	const textAreaData = getTextAreaData(flattenData, titles);
+			const textAreaData = getTextAreaData(flattenData, titles);
 
 			setFlattenData(flattenData);
 			setTextAreaData(textAreaData.join('\n'));
-			setCurTitles(titles);
+			// setCurTitles(titles);
 		}
 
 		return ()=>{
@@ -74,22 +75,35 @@ const TreeTextArea = (props: Props): JSX.Element => {
 		setText('');
 	}
 
-	const getTreeData = (e: any): void => {
-		// console.log('---__textAreaData---', __textAreaData);
-		console.log('---__flattenData---', __flattenData);
+	// 设置默认值
+	const getDefaultData = (): void => {
+		const { defaultData } = props;
+		setTextAreaData(defaultData || DEFAULT_TEXT);
+	}
 
-		const { errorCode, ERROR_INFO } = isEquelLevel(__textAreaData);
+	const getTreeData = (e: any): void => {
+		const { onChangeTreeData } = props;
+
+		const textareaInstance = new treeTextAreaDataHandle({
+			flattenData: __flattenData,
+			textAreaTexts: __textAreaData,
+			delimiter: __delimiter,
+			maxLevel: __maxLevel,
+		});
+
+		const { errorCode, ERROR_INFO } = textareaInstance.isEquelLevel();
 
 		if (errorCode !== 0) {
 			setErrCode(errorCode);
 			setText(ERROR_INFO[errorCode]);
     } else {
-			// console.log();
-			const levelTitles = getLevelTitles(__textAreaData);
-			const valueData = transDataFromText(__flattenData, __textAreaData);
+			const levelTitles = textareaInstance.getLevelTitles();
+			const valueData = textareaInstance.transDataFromText();
 			
-			console.log('--levelTitles--', levelTitles);
-			console.log('--valueData--', valueData);
+			if (onChangeTreeData) {
+				onChangeTreeData(levelTitles, valueData);
+			}
+
 		}
 
 	}
@@ -108,8 +122,18 @@ const TreeTextArea = (props: Props): JSX.Element => {
 			{
 				__shouleGetTreeData ? (
 					<div className={styles.btnBox}>
-					<button className={styles.btn}>填充默认值</button>
-					<button className={styles.btn} onClick={getTreeData}>得到树状值</button>
+					<button
+						className={`${styles.btn} ${styles.btnOutline}`}
+						onClick={getDefaultData}
+					>
+						填充默认值
+					</button>
+					<button
+						className={styles.btn}
+						onClick={getTreeData}
+					>
+						得到树状值
+					</button>
 				</div>
 				) : null
 			}

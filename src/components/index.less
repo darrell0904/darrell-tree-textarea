@@ -26,8 +26,8 @@
       font-size: 14px;
       border-radius: 2px;
 
-      &.btn {
-        margin-left: 8px;
+      & + .btn {
+        margin-left: 16px;
       }
 
       &:hover,
@@ -38,6 +38,17 @@
         border-color: #43a047;
         text-decoration: none;
         outline: 0;
+      }
+
+      &.btnOutline {
+        background: #fff;
+        color: #4caf50;
+        border: 1px solid #4caf50;
+
+        &:hover {
+          color: #fff;
+          background-color: #4caf50;
+        }
       }
     }
   }

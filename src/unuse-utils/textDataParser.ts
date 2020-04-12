@@ -1,8 +1,12 @@
+/**
+ * 处理用户修改后 基本映射数据
+ */
+
 import { forEach, uniq } from 'lodash';
 
-import { ROOT_ARR_PREFIX } from './CONST'
+import { ROOT_ARR_PREFIX } from '../utils/CONST'
 
-import { _id } from './utils'
+import { _id } from '../utils/utils'
 
 import { parserItemObj, parserRootObj, namesArrObj } from '../types'
 

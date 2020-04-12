@@ -6,9 +6,9 @@
 
 import { forEach, concat } from 'lodash';
 
-import { ROOT_ARR_PREFIX, EXIST_ARR_PREFIX, ADD_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX } from './CONST'
+import { ROOT_ARR_PREFIX, EXIST_ARR_PREFIX, ADD_ARR_PREFIX, HANDLE_ADD_ARR_PREFIX } from '../utils/CONST'
 
-import { _id } from './utils'
+import { _id } from '../utils/utils'
 
 import {
   FlattenDataObj,

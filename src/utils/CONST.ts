@@ -10,6 +10,9 @@ export const EXIST_ARR_PREFIX = 'EXIST_ARR_PREFIX';
 // 新增数据数组
 export const ADD_ARR_PREFIX = 'ADD_ARR_PREFIX';
 
+// 新增和存在数据数组
+export const EXIST_ADD_ARR_PREFIX = 'EXIST_ADD_ARR_PREFIX';
+
 // 填充了属性的 新增数据数组
 export const HANDLE_ADD_ARR_PREFIX = 'HANDLE_ADD_ARR_PREFIX';
 
