@@ -5,11 +5,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "darrell-tree-textarea": "file:..",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "darrell-tree-textarea": "file:.."
   },
   "author": "Darrell",
   "dependencies": {
@@ -23,8 +23,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "darrell-photo-gallery": "^1.0.1"
-  }
+  ]
 }
