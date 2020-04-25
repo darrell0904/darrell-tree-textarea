@@ -25,7 +25,6 @@ interface Props {
 }
 
 const TreeTextArea = (props: Props): JSX.Element => {
-
 	// 属性值
 	// const [__row, setRow] = useState(props.row || 21);
 	// const [__showNumber, setShowNumber] = useState(props.showNumber || true);

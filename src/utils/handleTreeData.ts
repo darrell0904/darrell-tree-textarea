@@ -652,9 +652,6 @@ class treeTextAreaDataHandle {
     // const aaa = cloneDeep(addNamesArrObj);
     // console.log('---aaa----', aaa);
 
-    console.log('---existNamesArrObj---', existNamesArrObj);
-    console.log('---addNamesArrObj---', addNamesArrObj);
-
     this.existNamesArrObj = existNamesArrObj;
     this.addNamesArrObj = addNamesArrObj;
     this.existAndAddArrObj = existAndAddArrObj;
@@ -852,8 +849,6 @@ class treeTextAreaDataHandle {
     }
 
     lastData = concat(lastData, ExistAndLast, deleteData);
-
-    console.log('----lastData---', lastData);
 
     this.newDataLists = lastData;
   };

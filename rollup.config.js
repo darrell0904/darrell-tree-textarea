@@ -32,6 +32,8 @@ const paths = {
   examOutput: path.join(__dirname, '/example/src/'),
 }
 
+console.log(path.resolve(path.join(__dirname, './node_modules/react')));
+
 // rollup 配置项
 const rollupConfig = {
   input: paths.input,
@@ -44,16 +46,15 @@ const rollupConfig = {
       sourcemap: true,
       plugins: [terser()],
       globals: {
-        'react-dom': 'ReactDOM',
         react: 'React',
-        'lodash': '_',
+        'react-dom': 'ReactDOM',
+        lodash: '_',
       }
     }
   ],
   external: ['react', 'react-dom', 'lodash'],
   plugins: [
     external(),
-
     postcss({
       modules: true, // 增加 css-module 功能
       extensions: ['.less', '.css'],

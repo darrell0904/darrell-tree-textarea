@@ -28,5 +28,5 @@
     "src",
     "./typings/"
   ],
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "lib", "example"]
 }

@@ -2,7 +2,7 @@
  * 处理渲染数据
  */
 
-import { forEach, filter, concat, cloneDeep } from 'lodash';
+import { forEach, filter, concat } from 'lodash'
 
 import { MAX_LEVEL } from './CONST'
 
@@ -80,8 +80,6 @@ export const flattenChainedData = (data: any) => {
       arr = concat(arr, dataNew);
     }
   });
-
-  console.log(cloneDeep(arr))
 
   return arr;
 };
