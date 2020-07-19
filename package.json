@@ -44,7 +44,7 @@
     "http-server": "^0.12.1",
     "jest": "^24.9.0",
     "less": "^3.11.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "rollup": "^2.1.0",
     "rollup-plugin-alias": "^2.2.0",
     "rollup-plugin-babel": "^4.4.0",
